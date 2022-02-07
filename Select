@@ -1,0 +1,38 @@
+ALTER   PROC [dbo].[Locations_SelectAll]
+	@UserId int
+	,@PageIndex int
+	,@PageSize int
+	
+
+AS
+/*
+Declare 
+	@UserId int = 25
+	,@pageIndex int = 0
+	,@pageSize int = 3
+Execute dbo.Locations_SelectAll
+	@UserId 
+	,@pageIndex 
+	,@pageSize
+*/
+BEGIN
+	DECLARE @offset INT = @PageIndex * @PageSize
+
+	SELECT 
+				l.[id]	
+				,l.[LocationTypeId]
+				,lt.[LocationType]
+				,l.[LineOne]
+				,l.[LineTwo]
+				,l.[City]
+				,l.[Zip]
+				,s.[Code] State
+				,TotalCount = COUNT(1) OVER()
+	FROM dbo.Locations l
+	JOIN dbo.States s ON l.StateId = s.Id
+	JOIN dbo.LocationTypes lt ON l.LocationTypeId = lt.Id
+	WHERE CreatedBy = @UserId
+	ORDER BY l.Id
+	Offset @offset ROWS
+	FETCH NEXT @pageSize ROWS only
+END
