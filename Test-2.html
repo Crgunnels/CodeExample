@@ -1,0 +1,45 @@
+<body onload="solution([2, 2, 3, 4, 3, 3, 2, 2, 1, 1, 2, 5])">
+
+    <script>
+        function solution(A) {
+            let numCastles = 0;
+            for (let i = 0; i <= A.length; i++) {
+                if (i > 0) {
+                    if (A[i] === A[i + 1] &&
+                        A[i + 2] < A[i + 1]) { // Found a suitable place, but there is a lower valley
+                        i++;
+                        continue;
+                    }
+    
+                    if (A[i - 1] < A[i] &&
+                        A[i + 1] < A[i]
+                    ) {
+                        numCastles++; // Castle 2
+                        continue;
+                    }
+    
+                    if (A[i - 1] > A[i] &&
+                        A[i] === A[i + 1]) {
+                        numCastles++; // Castle 3
+                        i++;
+                        continue;
+                    }
+    
+                    if (i === A.length &&
+                        A[i - 1] < A[i]) { // Castle 4 - We're at the end, and we're at the top
+                        numCastles++;
+                        break;
+                    }
+                }
+    
+                if (A[i] === A[i + 1]) {
+                    numCastles++; // Castle 1
+                    i++;
+                }
+            }
+    
+            console.log("Final Castle Count:" + numCastles)
+            debugger;
+        }
+    </script>
+    
